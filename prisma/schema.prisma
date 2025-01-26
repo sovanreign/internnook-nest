@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  Student
+  Coordinator
+  Company
+  Admin
+}
+
+model User {
+  id        Int   @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student Student?
+  coordinator Coordinator?
+  company Company?
+}
+
+model Student {
+  userId Int @id
+  user   User @relation(fields: [userId], references: [id])
+  firstName String
+  lastName String
+  bio String?
+  school String
+  program String
+  resumeUrl String?
+  coordinatorId Int
+  coordinator Coordinator @relation(fields: [coordinatorId], references: [userId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Coordinator {
+  userId Int @id
+  user   User @relation(fields: [userId], references: [id])
+  firstName String
+  lastName String
+  bio String?
+  school String
+  department String
+  students Student[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Company {
+  userId Int @id
+  user   User @relation(fields: [userId], references: [id])
+  name String
+  bio String?
+  logoUrl String
+  industry String
+  address String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
