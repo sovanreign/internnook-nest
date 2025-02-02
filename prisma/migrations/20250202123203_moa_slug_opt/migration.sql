@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "MOA" ALTER COLUMN "companySlug" DROP NOT NULL,
+ALTER COLUMN "coordinatorSlug" DROP NOT NULL,
+ALTER COLUMN "studentSlug" DROP NOT NULL;

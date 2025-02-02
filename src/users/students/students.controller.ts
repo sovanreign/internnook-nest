@@ -45,9 +45,6 @@ export class StudentsController {
     const resumeUrl = file ? `/uploads/${file.filename}` : null;
 
     createStudentDto.userId = parseInt(createStudentDto.userId as any);
-    createStudentDto.coordinatorId = parseInt(
-      createStudentDto.coordinatorId as any,
-    );
 
     return this.studentsService.create({
       resumeUrl,
@@ -86,9 +83,6 @@ export class StudentsController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     updateStudentDto.userId = parseInt(updateStudentDto.userId as any);
-    updateStudentDto.coordinatorId = parseInt(
-      updateStudentDto.coordinatorId as any,
-    );
 
     return this.studentsService.update(+id, updateStudentDto, file);
   }

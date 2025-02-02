@@ -17,6 +17,7 @@ export class InternshipsService {
     return this.db.internship.findMany({
       include: {
         company: true,
+        applications: true,
       },
     });
   }
@@ -26,6 +27,15 @@ export class InternshipsService {
       where: { id },
       include: {
         company: true,
+        applications: {
+          include: {
+            student: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
       },
     });
   }

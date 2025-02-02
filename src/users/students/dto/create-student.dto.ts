@@ -31,5 +31,5 @@ export class CreateStudentDto {
 
   @IsString()
   @IsNotEmpty()
-  coordinatorId: number;
+  inviteCode: string;
 }

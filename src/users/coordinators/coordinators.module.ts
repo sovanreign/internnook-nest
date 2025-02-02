@@ -7,5 +7,6 @@ import { UsersModule } from '../users.module';
   imports: [forwardRef(() => UsersModule)],
   controllers: [CoordinatorsController],
   providers: [CoordinatorsService],
+  exports: [CoordinatorsService],
 })
 export class CoordinatorsModule {}

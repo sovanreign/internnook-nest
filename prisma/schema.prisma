@@ -20,6 +20,25 @@ enum Role {
   Admin
 }
 
+enum StudentStatus {
+  Looking
+  Signing
+  Hired
+}
+
+enum ApplicationStatus {
+  Applied
+  Reviewing
+  Hired
+  Rejected
+  Withdrawn
+}
+
+enum MoaStatus {
+  Pending
+  Completed
+}
+
 
 model User {
   id        Int   @id @default(autoincrement())
@@ -45,6 +64,9 @@ model Student {
   resumeUrl String?
   coordinatorId Int
   coordinator Coordinator @relation(fields: [coordinatorId], references: [userId])
+  status StudentStatus @default(Looking)
+  applications Application[]
+  moas MOA[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -59,6 +81,7 @@ model Coordinator {
   department String
   inviteCode String @unique
   students Student[]
+  moas MOA[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -72,6 +95,7 @@ model Company {
   industry String
   address String
   internships Internship[]
+  moas MOA[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -84,6 +108,40 @@ model Internship {
   companyId Int
   company Company @relation(fields: [companyId], references: [userId])
   isOpen Boolean @default(true)
+  applications Application[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Application {
+  id Int @id @default(autoincrement())
+  studentId Int
+  student Student @relation(fields: [studentId], references: [userId])
+  internshipId Int
+  internship Internship @relation(fields: [internshipId], references: [id])
+  status ApplicationStatus @default(Applied)
+  moas MOA[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MOA {
+  id Int @id @default(autoincrement())
+  studentId Int
+  student Student @relation(fields: [studentId], references: [userId])
+  coordinatorId Int
+  coordinator Coordinator @relation(fields: [coordinatorId], references: [userId])
+  companyId Int
+  company Company @relation(fields: [companyId], references: [userId])
+  applicationId Int
+  application Application @relation(fields: [applicationId], references: [id])
+  studentSigned Boolean @default(false)
+  coordinatorSigned Boolean @default(false) 
+  companySigned Boolean @default(false) 
+  status MoaStatus @default(Pending)
+  studentSlug String?
+  coordinatorSlug String?
+  companySlug String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

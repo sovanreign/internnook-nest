@@ -30,6 +30,22 @@ export class CoordinatorsService {
   findOne(id: number) {
     return this.db.coordinator.findUnique({
       where: { userId: id },
+      include: {
+        user: true,
+        students: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+  }
+
+  findOneByInviteCode(inviteCode: string) {
+    return this.db.coordinator.findUniqueOrThrow({
+      where: {
+        inviteCode,
+      },
     });
   }
 

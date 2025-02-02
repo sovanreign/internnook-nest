@@ -5,17 +5,27 @@ import { DatabaseService } from 'src/database/database.service';
 import { UsersService } from '../users.service';
 import { join } from 'path';
 import { unlink } from 'fs/promises';
+import { CoordinatorsService } from '../coordinators/coordinators.service';
 
 @Injectable()
 export class StudentsService {
   constructor(
     private db: DatabaseService,
     private usersService: UsersService,
+    private coordinatorsService: CoordinatorsService,
   ) {}
 
-  create(createStudentDto: CreateStudentDto) {
+  async create(createStudentDto: CreateStudentDto) {
+    const { inviteCode, ...student } = createStudentDto;
+
+    const coordinator =
+      await this.coordinatorsService.findOneByInviteCode(inviteCode);
+
     return this.db.student.create({
-      data: createStudentDto,
+      data: {
+        ...student,
+        coordinatorId: coordinator.userId,
+      },
     });
   }
 
@@ -26,6 +36,10 @@ export class StudentsService {
   findOne(id: number) {
     return this.db.student.findUniqueOrThrow({
       where: { userId: id },
+      include: {
+        user: true,
+        coordinator: true,
+      },
     });
   }
 

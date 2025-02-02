@@ -6,6 +6,9 @@ import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { InternshipsModule } from './internships/internships.module';
+import { ApplicationsModule } from './applications/applications.module';
+import { EsignaturesModule } from './esignatures/esignatures.module';
+import { MoasModule } from './moas/moas.module';
 
 @Module({
   imports: [
@@ -20,6 +23,9 @@ import { InternshipsModule } from './internships/internships.module';
     UsersModule,
     AuthModule,
     InternshipsModule,
+    ApplicationsModule,
+    EsignaturesModule,
+    MoasModule,
   ],
   controllers: [],
   providers: [],
