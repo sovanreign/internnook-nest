@@ -22,12 +22,19 @@ export class UsersService {
   }
 
   findAll() {
-    return this.db.user.findMany();
+    return this.db.user.findMany({
+      include: {
+        company: true,
+      },
+    });
   }
 
   findOne(id: number) {
     return this.db.user.findUnique({
       where: { id },
+      include: {
+        company: true,
+      },
     });
   }
 

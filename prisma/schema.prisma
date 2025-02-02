@@ -20,6 +20,7 @@ enum Role {
   Admin
 }
 
+
 model User {
   id        Int   @id @default(autoincrement())
   email     String   @unique
@@ -35,7 +36,7 @@ model User {
 
 model Student {
   userId Int @id
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   firstName String
   lastName String
   bio String?
@@ -50,12 +51,13 @@ model Student {
 
 model Coordinator {
   userId Int @id
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   firstName String
   lastName String
   bio String?
   school String
   department String
+  inviteCode String @unique
   students Student[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -63,12 +65,25 @@ model Coordinator {
 
 model Company {
   userId Int @id
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   name String
   bio String?
   logoUrl String
   industry String
   address String
+  internships Internship[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Internship {
+  id Int @id @default(autoincrement())
+  position String
+  shortInfo String
+  description String
+  companyId Int
+  company Company @relation(fields: [companyId], references: [userId])
+  isOpen Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
